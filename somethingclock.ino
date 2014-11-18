@@ -7,10 +7,12 @@ const int pressure_out = 12;
 const size_t NUM_HEADER_BYTES = 7;
 const char BEGIN[] = "\x08\x06\x07\x05\x03\x00\x09";
 
-const int ISR_PINS[] = {50, 51, 52, 53};
+const int LED_PINS[] = {50, 51, 52, 53};
 
 void seconds_meter(int seconds)
 {
+  // Add a bit more to get low numbers into the range that
+  // even registers
   analogWrite(seconds_out, ((seconds+5.0)/(59+5))*255.0);    
 }
 
@@ -118,8 +120,8 @@ public:
   void set_active_city(size_t i){
     this->active_city = i;
     
-    for (size_t j=0; j<sizeof(ISR_PINS); ++j){
-      digitalWrite(ISR_PINS[j], (i==j ? HIGH : LOW));
+    for (size_t j=0; j<sizeof(LED_PINS); ++j){
+      digitalWrite(LED_PINS[j], (i==j ? HIGH : LOW));
     }
   }
 };
@@ -134,9 +136,9 @@ void city_3(){app.set_active_city(3);}
 
 void setup_isr()
 {
-  for (size_t i; i<sizeof(ISR_PINS); i++){
-    pinMode(ISR_PINS[i], OUTPUT);
-    digitalWrite(ISR_PINS[i], LOW);
+  for (size_t i; i<sizeof(LED_PINS); i++){
+    pinMode(LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
   }
     
   pinMode(2, INPUT_PULLUP);
